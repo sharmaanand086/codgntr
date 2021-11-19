@@ -1,0 +1,30 @@
+ <a class="btn btn-primary float-right" role="button" href="<?php echo site_url().'Admin/Leads/exportsData'; ?>" style="margin-left: 26%;">Download Leads</a>
+
+
+
+
+public function exportsData(){ 
+$this->db->select('leads.*,utm.matchtype,utm.device,utm.network,utm.creative,utm.keyword,utm.placement,utm.devicemodel,utm.target,utm.adgroupid,utm.campaignid,utm.utm_source AS source,utm.utm_medium AS medium,utm.utm_campaign AS campaign' );
+       $this->db->from('leads');
+	   $this->db->join('utm', 'utm.lid = leads.Lid','left');
+       $this->db->order_by('leads.Lid' , 'DESC');
+       //$this->db->join('categories' , 'categories.id = posts.category_id');
+       $query = $this->db->get();
+       $data = $query->result_array();
+	   //echo "<pre>"; print_r($data); 	   exit;
+             header("Content-type: application/csv");
+            header("Content-Disposition: attachment; filename=\"Leads".".csv\"");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+
+            $handle = fopen('php://output', 'w');
+            
+			$header = array("Lead Id","Lname","Lemail","mobile","city","country","enquiry","message","matchtype","device","network","keywords","placement","source","medium","campaign","term","content","domain_name","gclid","extra","time","matchtype","device","network","creative","keyword","placement","devicemodel","target","adgroupid","campaignid","source","medium","campaign",); 
+			
+			fputcsv($handle, $header);
+            foreach ($data as $data_array) {
+                fputcsv($handle, $data_array);
+            }
+                fclose($handle);
+            exit;
+        }
