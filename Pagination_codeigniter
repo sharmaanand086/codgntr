@@ -36,3 +36,46 @@ public function video_category_list(){
       
 		$this->load->view('gallary/videoCategory', $this->data);
 	}
+
+
+function get_count(){
+        return $this->db->count_all('gallary_videos');
+    }
+    function get_videos($limit, $start)
+    {
+        $this->db->select();
+        $this->db->from('gallary_videos');
+        $this->db->order_by('created_date', 'desc');
+         $this->db->limit($limit, $start);
+        $query = $this->db->get();
+        
+        return $query->result_array();
+    }
+
+
+<style>
+    ul.pagination li a{
+        text-decoration: none;
+        
+    }
+.gallery-grid-wrapper .pagination-wrapper {
+    margin: 25px 10px;
+}
+
+
+element.style {
+}
+.justify-content-center {
+    justify-content: center!important;
+}
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+}
+</style>
+
+<div class="pagination-wrapper">
+              <nav aria-label="Page navigation example"><?php echo $links; ?>
+              </nav>
+              </div>
