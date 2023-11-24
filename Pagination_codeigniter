@@ -1,0 +1,38 @@
+$route['video-category-list'] = "gallary/video_category_list";
+$route['gallary/video_category_list/:any'] = "gallary/video_category_list/$1";
+
+public function video_category_list(){
+        $this->load->library("pagination");
+		$this->data['page_title'] = 'Video Category List';
+		$config = array();
+        $config["base_url"] = site_url() . "gallary/video_category_list/";
+        $config["total_rows"] = $this->model_gallary->get_count();
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+        $config['full_tag_open'] = ' <ul class="pagination justify-content-center">';
+        $config['full_tag_close'] = '</ul></div>';
+        $config['first_link'] = false;
+        $config['last_link'] = false;
+        $config['first_tag_open'] = '<li style="border: 1px solid #8888;padding: 2px 10px;">';
+        $config['first_tag_close'] = '</li>';
+        $config['prev_link'] = '«';
+        $config['prev_tag_open'] = '<li class="prev" style="border: 1px solid #8888;padding: 2px 10px;">';
+        $config['prev_tag_close'] = '</li>';
+        $config['next_link'] = '»';
+        $config['next_tag_open'] = '<li style="border: 1px solid #8888;padding: 2px 10px;">';
+        $config['next_tag_close'] = '</li>';
+        $config['last_tag_open'] = '<li style="border: 1px solid #8888;padding: 2px 10px;">';
+        $config['last_tag_close'] = '</li>';
+        $config['cur_tag_open'] =  '<li class="active" style="border: 1px solid #8888;padding: 2px 10px;background-color:red;background-color: #13172a;"><a style="text-decoration: none;color:#ffff" href="#">';
+        $config['cur_tag_close'] = '</a></li>';
+        $config['num_tag_open'] = '<li style="border: 1px solid #8888;padding: 2px 10px;">';
+        $config['num_tag_close'] = '</li>';
+        $this->pagination->initialize($config);
+        // var_dump($this->uri->segment(3));
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
+        $this->data["links"] = $this->pagination->create_links();
+        $this->data['categoryData'] = $this->model_gallary->get_videos($config["per_page"], $page);
+      
+		$this->load->view('gallary/videoCategory', $this->data);
+	}
